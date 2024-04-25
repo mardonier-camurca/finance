@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Platform } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Platform, ActivityIndicator } from 'react-native';
 
 import { 
     Background, 
@@ -13,11 +13,18 @@ import {
 import { AuthContext } from '../../contexts/auth';
 
 export default function SignUp(){
-
-    const { user } = useContext(AuthContext)
-
+    
+    const { signUp, loadingAuth } = useContext(AuthContext)
+    
+    
+    const [nome, setNome ] = useState('');
+    const [email, setEmail ] = useState('');
+    const [password, setPassword ] = useState('');
+    
     function handleSignUp(){
-        console.log(user);
+        if(nome === '' || email === '' || password === '') return;
+        
+        signUp(nome, email, password);
 
     }
 
@@ -30,27 +37,37 @@ export default function SignUp(){
                 <AreaInput>
                     <Input
                         placeholder='Nome...'
-                    />
+                        value={nome}
+                        onChangeText={ (text) => setNome(text) }
+                        />
                 </AreaInput>
                 
                 <AreaInput>
                     <Input
                         placeholder='Email...'
-                    />
+                        value={email}
+                        onChangeText={ (text) => setEmail(text) }
+                        />
                 </AreaInput>
                 
                 <AreaInput>
                     <Input
                         placeholder='Senha'
+                        value={password}
+                        onChangeText={ (text) => setPassword(text) }
+                        secureTextEntry={true}
                     />
                 </AreaInput>
 
                 <SubmitButton onPress={handleSignUp}>
-                    <SubmitText>Cadastrar</SubmitText>
-
+                    {
+                        loadingAuth ? (
+                            <ActivityIndicator size={25} color='#FFF'/>
+                        ) : (
+                            <SubmitText>Cadastrar</SubmitText>
+                        )
+                    }
                 </SubmitButton>
-
-
             </Container>
         </Background>
     )
