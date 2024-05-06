@@ -19,7 +19,6 @@ export default function Profile(){
     const { user, signOut } = useContext(AuthContext);
     const navigation = useNavigation();
 
-
     return(
         <Container>
             <Header title='Meu Perfil'/>
@@ -29,11 +28,9 @@ export default function Profile(){
             <Name numberOfLines={1}>
                 {user && user.name}
             </Name>
-
             <NewLink onPress={ () => navigation.navigate('Registrar')} >
                 <NewText>Fazer registro</NewText>
             </NewLink>
-
             <LogoutButton onPress={ () => signOut() }>
                 <LogoutText>Deslogar</LogoutText>
             </LogoutButton>

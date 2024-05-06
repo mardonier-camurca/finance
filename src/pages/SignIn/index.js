@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Platform, ActivityIndicator } from 'react-native';
-
 import { 
     Background, 
     Container, 
@@ -12,21 +11,18 @@ import {
     Link, 
     LinkText
 } from './styles';
-
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../contexts/auth';
 
 export default function SignIn(){
     const navigation = useNavigation();
     const { signIn, loadingAuth } = useContext(AuthContext);
-    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
 function handleLogin(){
     signIn(email, password)
 }
-
     return(
         <Background>
             <Container
@@ -67,7 +63,6 @@ function handleLogin(){
                 <Link onPress={ () => navigation.navigate('SignUp')}>
                     <LinkText>Criar uma conta!</LinkText>
                 </Link>
-
             </Container>
         </Background>
     )

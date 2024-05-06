@@ -11,7 +11,6 @@ export const ModalContent = styled.View`
     justify-content: center;
     background-color: #FFF;
     padding: 14px;
-
 `;
 
 export const ButtonFilter = styled.TouchableOpacity`

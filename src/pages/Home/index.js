@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { TouchableOpacity, Modal } from 'react-native';
-
 import { AuthContext } from '../../contexts/auth';
-
 import Header from '../../components/Header';
 import { 
     Background, 
@@ -11,15 +9,12 @@ import {
     Title,
     List
 } from './styles';
-
 import api from '../../services/api';
 import { format } from 'date-fns';
-
 import { useIsFocused } from '@react-navigation/native';
 import BalanceItem from '../../components/BalanceItem';
 import HistoricoList from '../../components/HistoricoList';
 import CalendarModal from '../../components/CalendarModal';
-
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function Home(){
@@ -31,34 +26,27 @@ export default function Home(){
 
     useEffect(() => {
         let isActive = true;
-
         async function getMovements(){
             let date = new Date(dateMoviments);
             let onlyDate = date.valueOf() + date.getTimezoneOffset() * 60 * 1000;
             let dateFormated = format(onlyDate, 'dd/MM/yyyy');
-
             const receives = await api.get('/receives', {
                 params:{
                     date: dateFormated
                 }
             })
-            
             const balance = await api.get('/balance', {
                 params:{
                     data: dateFormated
                 }
             })
-            
             if(isActive){
                 setMoviments(receives.data);
                 setListBalance(balance.data);
             }
         }
-        
         getMovements();
-        
         return() => isActive = false;
-        
         }, [isFocused, dateMoviments])
 
     async function handleDelete(id){
@@ -77,7 +65,6 @@ export default function Home(){
     function filterDateMovements(dateSelected){
         setdateMoviments(dateSelected);
     }
-
     return(
         <Background>
             <Header title='Minhas movimentações'/>
@@ -88,14 +75,12 @@ export default function Home(){
                     keyExtractor={ item => item.tag }
                     renderItem={ ({ item }) => ( <BalanceItem data={item} /> ) }
                 />
-
                 <Area>
                     <TouchableOpacity onPress={ () => setModalVisibel(true) }>
                         <Icon name='event' color='#121212' size={30} />
                     </TouchableOpacity>
                     <Title>Últimas movimentações</Title>
                 </Area>
-
                 <List
                     data={moviments}
                     keyExtractor={ item => item.id }
@@ -103,14 +88,12 @@ export default function Home(){
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingBottom: 20 }}
                 />
-
                 <Modal visible={modalVisible} animationType='fade' transparent={true}>
                     <CalendarModal
                         setVisible={ () => setModalVisibel(false) }
                         handleFilter={filterDateMovements}
                     />
                 </Modal>
-
         </Background>
     )
 }

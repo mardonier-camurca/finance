@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { View, Text, Image} from 'react-native';
-
 import { DrawerItemList, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { AuthContext } from '../../contexts/auth'
 
@@ -31,10 +30,6 @@ export default function CustomDrawer(props){
                 label='Sair do app'
                 onPress={ () => signOut()}
             />
-
-
-
         </DrawerContentScrollView>
     )
 }
-

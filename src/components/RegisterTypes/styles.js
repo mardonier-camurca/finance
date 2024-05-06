@@ -27,4 +27,3 @@ export const RegisterLabel = styled.Text`
     font-size: 16px;
 
 `;
-

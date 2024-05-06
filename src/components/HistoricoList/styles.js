@@ -34,10 +34,3 @@ export const ValorText = styled.Text`
     color: #121212;
     font-size: 22px;
 `;
-
-
-
-
-
-
-

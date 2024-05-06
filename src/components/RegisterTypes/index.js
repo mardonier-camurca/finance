@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
-
 import { RegisterContainer, RegisterTypeButton, RegisterLabel } from './styles';
 
 export default function RegisterType({ type, sendTypeChanged }){
     const [typeChecked, setTypeChecked ] = useState(type);
-    
+
     function changeType(name){
         if(name === 'receita'){
             setTypeChecked('receita');
@@ -41,5 +40,4 @@ export default function RegisterType({ type, sendTypeChanged }){
 
         </RegisterContainer>
     )
-
 }

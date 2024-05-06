@@ -1,10 +1,8 @@
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
 import Home from '../pages/Home';
 import Novo from '../pages/Novo';
 import Profile from '../pages/Profile';
-
 import CustomDrawer from '../components/CustomDrawer';
 
 const AppDrawer = createDrawerNavigator();
@@ -15,7 +13,6 @@ function AppRoutes(){
             drawerContent={ (props) => <CustomDrawer {...props} /> }
             screenOptions={{
                 headerShown: false,
-
                 drawerStyle:{
                     backgroundColor: '#FFF',
                     paddingTop: 20,
@@ -23,7 +20,6 @@ function AppRoutes(){
 
                 drawerActiveBackgroundColor: '#3b3dbf',
                 drawerActiveTintColor: '#FFF',
-                
                 drawerInactiveBackgroundColor: '#F0F2FF',
                 drawerInactiveTintColor: '#121212'
             }}
