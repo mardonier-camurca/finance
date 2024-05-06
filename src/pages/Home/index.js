@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, Button } from 'react-native';
+import { TouchableOpacity, Modal } from 'react-native';
 
 import { AuthContext } from '../../contexts/auth';
 
 import Header from '../../components/Header';
 import { 
     Background, 
-    ListBalance 
+    ListBalance, 
+    Area, 
+    Title,
+    List
 } from './styles';
 
 import api from '../../services/api';
@@ -14,44 +17,100 @@ import { format } from 'date-fns';
 
 import { useIsFocused } from '@react-navigation/native';
 import BalanceItem from '../../components/BalanceItem';
+import HistoricoList from '../../components/HistoricoList';
+import CalendarModal from '../../components/CalendarModal';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function Home(){
     const isFocused = useIsFocused();
-    const [ listBalance, setListBalance  ] =  useState([]);
-    const [ dataMoviments, setDataMoviments  ] =  useState(new Date());
+    const [ listBalance, setListBalance] =  useState([]);
+    const [moviments, setMoviments] = useState([]);
+    const [dateMoviments, setdateMoviments] =  useState(new Date());
+    const [modalVisible, setModalVisibel] = useState(false);
 
     useEffect(() => {
         let isActive = true;
 
         async function getMovements(){
-            let dateFormated = format(dataMoviments, 'dd/MM/yyyy')
+            let date = new Date(dateMoviments);
+            let onlyDate = date.valueOf() + date.getTimezoneOffset() * 60 * 1000;
+            let dateFormated = format(onlyDate, 'dd/MM/yyyy');
 
+            const receives = await api.get('/receives', {
+                params:{
+                    date: dateFormated
+                }
+            })
+            
             const balance = await api.get('/balance', {
                 params:{
                     data: dateFormated
                 }
             })
-
+            
             if(isActive){
+                setMoviments(receives.data);
                 setListBalance(balance.data);
             }
         }
+        
         getMovements();
-
+        
         return() => isActive = false;
+        
+        }, [isFocused, dateMoviments])
 
-    },[isFocused])
+    async function handleDelete(id){
+        try {
+            await api.delete('/receives/delete', {
+                params:{
+                    item_id: id
+                }
+            })
+            setdateMoviments(new Date())
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    function filterDateMovements(dateSelected){
+        setdateMoviments(dateSelected);
+    }
 
     return(
         <Background>
             <Header title='Minhas movimentações'/>
-            <ListBalance
-                data={listBalance}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={ item => item.tag }
-                renderItem={ ({ item }) => ( <BalanceItem data={item} /> ) }
-            />
+                <ListBalance
+                    data={listBalance}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={ item => item.tag }
+                    renderItem={ ({ item }) => ( <BalanceItem data={item} /> ) }
+                />
+
+                <Area>
+                    <TouchableOpacity onPress={ () => setModalVisibel(true) }>
+                        <Icon name='event' color='#121212' size={30} />
+                    </TouchableOpacity>
+                    <Title>Últimas movimentações</Title>
+                </Area>
+
+                <List
+                    data={moviments}
+                    keyExtractor={ item => item.id }
+                    renderItem={({ item }) => <HistoricoList data={item} deleteItem={handleDelete} /> }
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 20 }}
+                />
+
+                <Modal visible={modalVisible} animationType='fade' transparent={true}>
+                    <CalendarModal
+                        setVisible={ () => setModalVisibel(false) }
+                        handleFilter={filterDateMovements}
+                    />
+                </Modal>
+
         </Background>
     )
 }

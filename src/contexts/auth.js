@@ -74,14 +74,14 @@ function AuthProvider({ children }){
                 email
             };
             
-            await AsyncStorage.setItem('@finToken', token)
+            await AsyncStorage.setItem('@finToken', token);
 
             api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
             setUser({
                 id,
                 name,
-                email
+                email,
             })
 
             setLoadingAuth(false);
@@ -100,7 +100,7 @@ function AuthProvider({ children }){
     }
 
     return(
-        <AuthContext.Provider value={{ signed: !!user, user, signUp, signIn, signOut, loadingAuth, setLoading }}> 
+        <AuthContext.Provider value={{ signed: !!user, user, signUp, signIn, signOut, loadingAuth, loading }}> 
             {children}
         </AuthContext.Provider>
     )
